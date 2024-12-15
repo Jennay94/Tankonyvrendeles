@@ -7,15 +7,15 @@
                              <ul>                  
                   </ul>
                 </li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#portfolio">MNB</a></li>
+            <li><a href="pdf_menu.php">PDF generátor</a></li>
+            <li><a href="/beadando/kliens/mnb.php">MNB</a></li>
                <li class="dropdown"><a href="#"><span>Felhasználói fiók</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
                 <li><a href="registration_admin.php">Admin</a></li>
                   <ul>
                   </ul>
                 </li>
-                <li><a href="#">Bejelentkezés</a></li>
+                <li><a href="login.php">Bejelentkezés</a></li>
                 <li><a href="register.php">Regisztráció</a></li>
               </ul>
             </li>

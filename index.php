@@ -1,18 +1,5 @@
 <?php include 'header.php'; ?>
 
-$menu_items = [
-    ['url' => 'index.php', 'name' => 'Kezdőlap'],
-    ['url' => 'about.php', 'name' => 'Rólunk'],
-    ['url' => 'services.php', 'name' => 'Szolgáltatások'],
-    ['url' => 'faq.php', 'name' => 'GYIK'], // Új menüpont
-    ['url' => 'contact.php', 'name' => 'Kapcsolat']
-];
-
-foreach ($menu_items as $item) {
-    echo '<li><a href="' . $item['url'] . '">' . $item['name'] . '</a></li>';
-}
-
-
 
 <body class="index-page">
 
@@ -116,11 +103,9 @@ foreach ($menu_items as $item) {
 
   <div class="row gy-4 align-items-center">
 
-    <div class="col-lg-5">
-      <img src="assets/img/tankonyv-stats.svg" alt="Tankönyv statisztikák" class="img-fluid">
-    </div>
+    
 
-    <div class="col-lg-7">
+    <div class="col-lg-12">
 
       <div class="row gy-4">
 
@@ -405,38 +390,7 @@ foreach ($menu_items as $item) {
             </div>
 
           </div>
-
-          <div class="col-lg-8">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade" data-aos-delay="100">
-              <div class="row gy-4">
-
-                <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
-                </div>
-
-                <div class="col-md-6 ">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <textarea class="form-control" name="message" rows="8" placeholder="Message" required=""></textarea>
-                </div>
-
-                <div class="col-md-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                  <button type="submit">Send Message</button>
-                </div>
-
-              </div>
-            </form>
-          </div><!-- End Contact Form -->
+        
 
         </div>
 

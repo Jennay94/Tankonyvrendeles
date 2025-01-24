@@ -1,80 +1,12 @@
 <?php
+// Adatbázis kapcsolat
+require_once('db.php');
 
-include('session_check.php');
-
-require_once __DIR__ . '/tankonyvrendeles/pdf/tcpdf.php'; // TCPDF helyes elérési útja
-require_once __DIR__ . '/db.php'; // Adatbázis kapcsolat
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Űrlapról érkező adatok
-    $diakId = $_POST['diak'] ?? '';
-    $rendelesId = $_POST['rendeles'] ?? '';
-    $tkId = $_POST['tk'] ?? '';
-
-    try {
-        // Adatbázisból adatok lekérése
-        // 1. Diák adatok
-        $stmt = $conn->prepare("SELECT nev, osztaly FROM diak WHERE az = ?");
-        $stmt->bind_param("i", $diakId);
-        $stmt->execute();
-        $diak = $stmt->get_result()->fetch_assoc();
-
-        // 2. Rendelés adatok
-        $stmt = $conn->prepare("SELECT ev, ingyenes FROM rendeles WHERE az = ?");
-        $stmt->bind_param("i", $rendelesId);
-        $stmt->execute();
-        $rendeles = $stmt->get_result()->fetch_assoc();
-
-        // 3. Tankönyv adatok
-        $stmt = $conn->prepare("SELECT cim, targy FROM tk WHERE az = ?");
-        $stmt->bind_param("i", $tkId);
-        $stmt->execute();
-        $tk = $stmt->get_result()->fetch_assoc();
-
-        // PDF létrehozása
-        $pdf = new TCPDF();
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Tankönyvrendelés Rendszer');
-        $pdf->SetTitle('Tankönyvrendelés PDF');
-        $pdf->SetHeaderData('', '', 'Tankönyvrendelés', 'Generált PDF dokumentum');
-
-        // Betűk és margók
-        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->SetMargins(15, 27, 15);
-        $pdf->SetHeaderMargin(5);
-        $pdf->SetFooterMargin(10);
-        $pdf->SetAutoPageBreak(TRUE, 25);
-
-        // Új oldal létrehozása
-        $pdf->AddPage();
-
-        // PDF tartalom (HTML formátumban)
-        $html = "
-            <h1>Tankönyvrendelés Adatok</h1>
-            <h2>Diák adatai</h2>
-            <p><strong>Név:</strong> {$diak['nev']}</p>
-            <p><strong>Osztály:</strong> {$diak['osztaly']}</p>
-
-            <h2>Rendelés adatai</h2>
-            <p><strong>Év:</strong> {$rendeles['ev']}</p>
-            <p><strong>Ingyenes:</strong> " . ($rendeles['ingyenes'] ? 'Igen' : 'Nem') . "</p>
-
-            <h2>Tankönyv adatai</h2>
-            <p><strong>Cím:</strong> {$tk['cim']}</p>
-            <p><strong>Tárgy:</strong> {$tk['targy']}</p>
-        ";
-
-        // PDF tartalom hozzáadása
-        $pdf->writeHTML($html, true, false, true, false, '');
-
-        // PDF letöltése
-        $pdf->Output('tankonyvrendeles.pdf', 'D'); // D: letöltés
-        exit;
-
-    } catch (Exception $e) {
-        echo "Hiba történt: " . $e->getMessage();
-    }
-}
+// Diákok listája
+$diak_query = "SELECT az, nev FROM Diak";
+$diak_stmt = $pdo->prepare($diak_query);
+$diak_stmt->execute();
+$diakok = $diak_stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -82,23 +14,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Generálás</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script>
+        // JavaScript függvények a dinamikus frissítéshez
+        function updateYearList() {
+            const diakaz = document.getElementById("diakaz").value;
+
+            // Az év lista frissítése a diák alapján
+            fetch('get_years.php?diakaz=' + diakaz)
+                .then(response => response.json())
+                .then(data => {
+                    const yearSelect = document.getElementById("ev");
+                    yearSelect.innerHTML = '';
+                    data.forEach(function (year) {
+                        const option = document.createElement("option");
+                        option.value = year.ev;
+                        option.text = year.ev;
+                        yearSelect.appendChild(option);
+                    });
+                    updateSubjectList(); // Frissítjük a tárgyakat is
+                });
+        }
+
+        function updateSubjectList() {
+            const diakaz = document.getElementById("diakaz").value;
+            const ev = document.getElementById("ev").value;
+
+            // A tárgyak lista frissítése a diák és év alapján
+            fetch('get_subjects.php?diakaz=' + diakaz + '&ev=' + ev)
+                .then(response => response.json())
+                .then(data => {
+                    const subjectSelect = document.getElementById("tkaz");
+                    subjectSelect.innerHTML = '';
+                    data.forEach(function (subject) {
+                        const option = document.createElement("option");
+                        option.value = subject.az;
+                        option.text = subject.cim;
+                        subjectSelect.appendChild(option);
+                    });
+                });
+        }
+    </script>
 </head>
 
-<body>
-    <h1>PDF Generálás</h1>
-    <form method="POST" action="pdf_menu.php">
-        <label for="diak">Diák (ID):</label>
-        <input type="number" id="diak" name="diak" required><br><br>
+<body class="container mt-5">
 
-        <label for="rendeles">Rendelés (ID):</label>
-        <input type="number" id="rendeles" name="rendeles" required><br><br>
+    <h2>PDF Generálás</h2>
+    <form action="generate_pdf.php" method="GET" class="mt-4">
 
-        <label for="tk">Tankönyv (ID):</label>
-        <input type="number" id="tk" name="tk" required><br><br>
+        <!-- Diák kiválasztása -->
+        <div class="mb-3">
+            <label for="diakaz" class="form-label">Diák:</label>
+            <select name="diakaz" id="diakaz" class="form-select" onchange="updateYearList()">
+                <option value="">Válasszon diákot</option>
+                <?php foreach ($diakok as $diak): ?>
+                    <option value="<?= $diak['az'] ?>"><?= $diak['nev'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-        <button type="submit">PDF Generálás</button>
+        <!-- Év kiválasztása -->
+        <div class="mb-3">
+            <label for="ev" class="form-label">Év:</label>
+            <select name="ev" id="ev" class="form-select" onchange="updateSubjectList()">
+                <option value="">Válasszon évet</option>
+            </select>
+        </div>
+
+        <!-- Tárgy kiválasztása -->
+        <div class="mb-3">
+            <label for="tkaz" class="form-label">Tárgy:</label>
+            <select name="tkaz" id="tkaz" class="form-select">
+                <option value="">Válasszon tárgyat</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">PDF Generálás</button>
+        <a href="index.php" style="float: right;">Vissza a főoldalra.</a>
     </form>
+
+    <!-- Bootstrap JS (opcionálisan) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>

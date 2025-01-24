@@ -1,25 +1,55 @@
-<nav id="navmenu" class="navmenu">
-          <ul>
-            <li><a href="index.php" class="active">Kezdőlap<br></a></li>
-            <li><a href="#about">Rendelés</a></li>
-            <li><a href="/beadando/kliens/soapKliens.php">SOAP Teszt</a></li>
+<?php
+// Adatbázis kapcsolat betöltése
+include('db.php');
 
-                             <ul>                  
-                  </ul>
-                </li>
-            <li><a href="pdf_menu.php">PDF generátor</a></li>
-            <li><a href="/beadando/kliens/mnb.php">MNB</a></li>
-               <li class="dropdown"><a href="#"><span>Felhasználói fiók</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                <li><a href="registration_admin.php">Admin</a></li>
-                  <ul>
-                  </ul>
-                </li>
-                <li><a href="login.php">Bejelentkezés</a></li>
-                <li><a href="register.php">Regisztráció</a></li>
-              </ul>
-            </li>
-            <li><a href="#contact">Kapcsolatok</a></li>
-          </ul>
-          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
+
+// Felhasználó rangjának lekérdezése (alapértelmezett 101 - vendég)
+$userRang = isset($_SESSION['user_rang']) ? $_SESSION['user_rang'] : 101;
+
+// Menüelemek lekérdezése rang alapján
+$query = "SELECT * FROM pages WHERE rang <= :userRang ORDER BY parent_id, id";
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':userRang', $userRang, PDO::PARAM_INT);
+$stmt->execute();
+$menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Rekurzív menüépítő függvény
+function renderMenu($menuItems, $parentId = null)
+{
+    $html = '';
+
+    foreach ($menuItems as $item) {
+        if ($item['parent_id'] == $parentId) {
+            // Ellenőrizzük, van-e gyermek elem
+            $children = renderMenu($menuItems, $item['id']);
+
+            // Menüelem hozzáadása
+            if ($children) {
+                // Ha van gyermek, dropdown menü
+                $html .= '<li class="dropdown">';
+                $html .= '<a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><span>' . htmlspecialchars($item['name']) . '</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>';
+                $html .= '<ul class="dropdown-menu">' . $children . '</ul>';
+                $html .= '</li>';
+            } else {
+                // Ha nincs gyermek, sima link
+                $html .= '<li><a href="' . $item['url'] . '">' . htmlspecialchars($item['name']) . '</a></li>';
+            }
+        }
+    }
+
+    return $html;
+}
+?>
+
+<body>
+    <nav id="navmenu" class="navmenu">
+        <ul>
+            <?= renderMenu($menuItems); ?>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+
+    <!-- Bootstrap JS és Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>

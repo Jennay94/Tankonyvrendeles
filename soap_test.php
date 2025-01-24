@@ -1,4 +1,5 @@
 <?php
+include('session_check.php'); 
 $options = [
     'location' => 'http://localhost/tankonyvrendeles/soap_server.php',
     'uri' => 'http://localhost/tankonyvrendeles/soap_server.php',

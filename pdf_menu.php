@@ -1,6 +1,8 @@
 <?php
-// TCPDF és adatbázis kapcsolat betöltése
-require_once __DIR__ . '/beadando/pdf/tcpdf.php'; // TCPDF helyes elérési útja
+
+include('session_check.php');
+
+require_once __DIR__ . '/tankonyvrendeles/pdf/tcpdf.php'; // TCPDF helyes elérési útja
 require_once __DIR__ . '/db.php'; // Adatbázis kapcsolat
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -37,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdf->SetHeaderData('', '', 'Tankönyvrendelés', 'Generált PDF dokumentum');
 
         // Betűk és margók
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->SetMargins(15, 27, 15);
         $pdf->SetHeaderMargin(5);
         $pdf->SetFooterMargin(10);
@@ -77,10 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="hu">
+
 <head>
     <meta charset="UTF-8">
     <title>PDF Generálás</title>
 </head>
+
 <body>
     <h1>PDF Generálás</h1>
     <form method="POST" action="pdf_menu.php">
@@ -96,4 +100,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit">PDF Generálás</button>
     </form>
 </body>
+
 </html>

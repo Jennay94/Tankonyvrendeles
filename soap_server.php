@@ -1,39 +1,61 @@
 <?php
-require 'db.php';
+require_once 'db.php';
 
-class TankonyvSOAP {
+class TankonyvService
+{
     private $pdo;
 
-    public function __construct() {
-        global $pdo;
+    public function __construct($pdo)
+    {
         $this->pdo = $pdo;
     }
 
-    public function getStudents() {
-        $stmt = $this->pdo->query("SELECT * FROM diak");
-        return $stmt->fetchAll();
+    function getAllRendelesek($limit) {
+            global $pdo;
+
+            // Az adatbázis lekérdezés limitálása
+            $stmt = $pdo->prepare("SELECT az, ev, tkaz, diakaz, ingyenes FROM rendeles LIMIT :limit");
+            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $rendelesek = $stmt->fetchAll();
+            
+            return $rendelesek;
     }
 
-    public function getOrders() {
-        $stmt = $this->pdo->query("
-            SELECT r.*, d.nev AS diak_nev, t.cim AS konyv_cim 
-            FROM rendeles r
-            JOIN diak d ON r.diakaz = d.az
-            JOIN tk t ON r.tkaz = t.az
-        ");
-        return $stmt->fetchAll();
+    // Egy adott rendelés lekérése ID alapján
+    public function getRendelesById($rendelesId)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM rendeles WHERE az = :az");
+        $stmt->bindValue(':az', $rendelesId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 
-    public function getBooks() {
-        $stmt = $this->pdo->query("SELECT * FROM tk");
-        return $stmt->fetchAll();
+    // Új rendelés hozzáadása
+    public function addRendeles($diakaz, $tkaz, $ev, $ingyenes)
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO rendeles (diakaz, tkaz, ev, ingyenes) VALUES (:diakaz, :tkaz, :ev, :ingyenes)");
+        $stmt->bindValue(':diakaz', $diakaz, PDO::PARAM_INT);
+        $stmt->bindValue(':tkaz', $tkaz, PDO::PARAM_INT);
+        $stmt->bindValue(':ev', $ev, PDO::PARAM_INT);
+        $stmt->bindValue(':ingyenes', $ingyenes, PDO::PARAM_BOOL);
+        $stmt->execute();
+        return "Új rendelés sikeresen hozzáadva!";
     }
 }
 
-$options = [
-    'uri' => 'http://localhost/tankonyvrendeles/soap_server.php',
-];
+$options = ['uri' => 'http://localhost/tankonyvrendeles/'];
 $server = new SoapServer(null, $options);
-$server->setClass('TankonyvSOAP');
-$server->handle();
+
+$service = new TankonyvService($pdo);
+$server->setObject($service);
+
+header("Content-Type: text/xml; charset=utf-8");
+
+try {
+    $server->handle();
+} catch (Exception $e) {
+    echo "SOAP Szerver hiba: " . $e->getMessage();
+}
 ?>

@@ -1,23 +1,90 @@
-<?php
+<!DOCTYPE html>
+<html lang="hu">
 
-include "db.php";
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regisztráció</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-$last_name = $_POST['last_name'];
-$first_name = $_POST['first_name'];
+<body>
 
-//$user_name = $first_name.$last_name;
+    <div class="container">
+        <?php
+        include "db.php";
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $last_name = $_POST['last_name'];
+            $first_name = $_POST['first_name'];
+            $user_name = $_POST['user_name'];
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+
+            try {
+
+                $stmt = $pdo->prepare("SELECT * FROM users WHERE user_name = :user_name");
+                $stmt->bindParam(':user_name', $user_name);
+                $stmt->execute();
+
+                // Ha van már ilyen felhasználó
+                if ($stmt->rowCount() > 0) {
+                    // Felhasználónév létezik
+                    echo '<div class="alert alert-danger text-center mt-5" role="alert">
+                    A felhasználónév már létezik.
+                  </div>';
+                    echo '<script>
+                    setTimeout(function() {
+                        window.location.href = "register.php";
+                    }, 3000); // 3 másodperc múlva átirányítjuk
+                  </script>';
+                } else {
+                    // Új felhasználó beszúrása
+                    $stmt = $pdo->prepare("INSERT INTO users (last_name, first_name, user_name, email, password, rang) 
+                                   VALUES (:last_name, :first_name, :user_name, :email, :password, :rang)");
+
+                    // Jelszó titkosítása
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+                    $rang = 102; // Alapértelmezett rang
+        
+                    // Paraméterek kötése és végrehajtás
+                    $stmt->bindParam(':last_name', $last_name);
+                    $stmt->bindParam(':first_name', $first_name);
+                    $stmt->bindParam(':user_name', $user_name);
+                    $stmt->bindParam(':email', $email);
+                    $stmt->bindParam(':password', $hashed_password);
+                    $stmt->bindParam(':rang', $rang);
+
+                    // Lekérdezés végrehajtása
+                    $stmt->execute();
+                    echo '<div class="alert alert-success text-center mt-5" role="alert">
+                    Felhasználó sikeresen regisztrálva!
+                  </div>';
+                    echo '<script>
+                    setTimeout(function() {
+                        window.location.href = "index.php"; // Visszairányítjuk a főoldalra
+                    }, 3000); // 3 másodperc múlva átirányítjuk
+                  </script>';
+                }
+            } catch (PDOException $e) {
+                echo '<div class="alert alert-danger text-center mt-5" role="alert">
+                Hiba történt: ' . $e->getMessage() . '
+              </div>';
+                echo '<script>
+                setTimeout(function() {
+                    window.location.href = "register.php";
+                }, 3000); // 3 másodperc múlva átirányítjuk
+              </script>';
+            }
+        }
+        ?>
+
+    </div>
 
 
-$stmt = $conn->prepare("SELECT * FROM users WHERE last_name = ? AND first_name = ?");
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
 
-$stmt->bind_param("ss", $last_name, $first_name);
-$stmt->execute();
-$resultSet = $stmt->get_result();
-$data = $resultSet->fetch_all(MYSQLI_ASSOC);
-
-
-
-
-echo var_dump($data);
-
-
+</html>

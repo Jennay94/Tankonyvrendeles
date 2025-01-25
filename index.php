@@ -304,7 +304,7 @@ session_start();
         <div class="content row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
           <div class="col-xl-10">
             <div class="text-center">
-              <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox play-btn"></a>
+              <a href="https://www.youtube.com/watch?v=5x-SLwtZYxs" class="glightbox play-btn"></a>
               <h3>Rendeld meg tankönyveidet most!</h3>
               <p>Ne hagyd az utolsó pillanatra a rendelést! Válogass a legjobb tankönyvek közül, és biztosítsd helyed
                 időben a jövő tanévre.</p>

@@ -57,7 +57,7 @@
                         echo '<script>
                                 setTimeout(function() {
                                     window.location.href = "index.php"; // Visszairányítjuk a főoldalra
-                                }, 3000); // 3 másodperc múlva átirányítjuk
+                                }, 1000); // 3 másodperc múlva átirányítjuk
                               </script>';
                     } else {
                         // Ha a jelszó nem egyezik
@@ -67,7 +67,7 @@
                         echo '<script>
                                 setTimeout(function() {
                                     window.location.href = "login.php"; // Visszairányítjuk a bejelentkezési oldalra
-                                }, 3000); // 3 másodperc múlva átirányítjuk
+                                }, 1000); // 3 másodperc múlva átirányítjuk
                               </script>';
                     }
                 }
@@ -78,7 +78,7 @@
                 echo '<script>
                         setTimeout(function() {
                             window.location.href = "login.php"; // Visszairányítjuk a bejelentkezési oldalra
-                        }, 3000); // 3 másodperc múlva átirányítjuk
+                        }, 1000); // 3 másodperc múlva átirányítjuk
                       </script>';
             }
         }

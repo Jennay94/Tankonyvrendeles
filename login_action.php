@@ -36,7 +36,7 @@
                     echo '<script>
                             setTimeout(function() {
                                 window.location.href = "login.php"; // Visszairányítjuk a bejelentkezési oldalra
-                            }, 3000); // 3 másodperc múlva átirányítjuk
+                            }, 1000); // 3 másodperc múlva átirányítjuk
                           </script>';
                 } else {
                     // Ha a felhasználó létezik, megnézzük a jelszót
@@ -49,7 +49,7 @@
                         $_SESSION['user_name'] = $user['user_name'];
                         $_SESSION['user_rang'] = $user['rang'];
 
-                        // Átirányítás a kezdőlapra vagy egy védett oldalra
+                        // Átirányítás a kezdőlapra 
                         echo '<div class="alert alert-success text-center mt-5" role="alert">
                                 Bejelentkezés sikeres! Átirányítás...
                               </div>';
@@ -83,8 +83,6 @@
         }
         ?>
     </div>
-
-    <!-- Bootstrap JS és Popper.js linkek -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>

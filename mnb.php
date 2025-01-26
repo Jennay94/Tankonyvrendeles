@@ -169,7 +169,7 @@ include 'head.php';
             </div>
 
             <button type="submit" class="btn btn-primary">Árfolyam lekérdezése</button>
-            <a href="../index.php" style="float: right;">Vissza a főoldalra.</a>
+
         </form>
 
         <!-- Lekérdezés eredmény -->

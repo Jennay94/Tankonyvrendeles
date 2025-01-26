@@ -2,9 +2,9 @@
 // Adatbázis kapcsolat
 require_once('db.php');
 
-// Ellenőrizzük, hogy az ev és tkaz paraméterek léteznek
-$ev = $_GET['ev'] ?? 2024; // Alapértelmezett év
-$tkaz = $_GET['tkaz'] ?? 1; // Alapértelmezett tárgy
+
+$ev = $_GET['ev'] ?? 2024;
+$tkaz = $_GET['tkaz'] ?? 1;
 
 // Diákok lekérdezése az adott év és tárgy szerint
 $diak_query = "

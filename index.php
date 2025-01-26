@@ -10,13 +10,8 @@ session_start();
 
 
   <main class="main">
-
-
-    <!-- Clients Section -->
     <section id="clients" class="clients section">
-
       <div class="container">
-
         <div class="swiper init-swiper">
           <script type="application/json" class="swiper-config">
             {
@@ -65,7 +60,7 @@ session_start();
 
       </div>
 
-    </section><!-- /Clients Section -->
+    </section>
 
     <section id="why-choose-us" class="why-choose-us section py-5 bg-light">
       <div class="container">
@@ -186,16 +181,10 @@ session_start();
       </div>
     </section>
 
-
     <!-- Stats Section -->
     <section id="stats" class="stats section">
-
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-
         <div class="row gy-4 align-items-center">
-
-
-
           <div class="col-lg-12">
 
             <div class="row gy-4">
@@ -231,7 +220,7 @@ session_start();
                     <p><strong>Iskolák együttműködésben</strong></p>
                   </div>
                 </div>
-              </div><!-- End Stats Item -->
+              </div>
 
               <div class="col-lg-6">
                 <div class="stats-item d-flex">
@@ -242,20 +231,13 @@ session_start();
                     <p><strong>Év tapasztalat</strong></p>
                   </div>
                 </div>
-              </div><!-- End Stats Item -->
-
+              </div>
             </div>
-
           </div>
-
         </div>
-
       </div>
+    </section>
 
-    </section><!-- /Stats Section -->
-
-
-    <!-- Call To Action Section -->
     <section id="call-to-action" class="call-to-action section dark-background">
 
       <div class="container">
@@ -273,20 +255,15 @@ session_start();
         </div>
       </div>
 
-    </section><!-- /Call To Action Section -->
+    </section>
 
-
-    <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials section">
 
-      <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Vásárlói vélemények</h2>
         <p>Olvasd el, mit mondanak a vásárlók a tankönyvrendelési szolgáltatásunkról!</p>
-      </div><!-- End Section Title -->
-
+      </div>
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-
         <div class="swiper init-swiper">
           <script type="application/json" class="swiper-config">
       {
@@ -331,7 +308,7 @@ session_start();
                   <i class="bi bi-quote quote-icon-right"></i>
                 </p>
               </div>
-            </div><!-- End testimonial item -->
+            </div>
 
             <div class="swiper-slide">
               <div class="testimonial-item">
@@ -349,7 +326,7 @@ session_start();
                   <i class="bi bi-quote quote-icon-right"></i>
                 </p>
               </div>
-            </div><!-- End testimonial item -->
+            </div>
 
             <div class="swiper-slide">
               <div class="testimonial-item">
@@ -367,7 +344,7 @@ session_start();
                   <i class="bi bi-quote quote-icon-right"></i>
                 </p>
               </div>
-            </div><!-- End testimonial item -->
+            </div>
 
           </div>
 
@@ -375,26 +352,19 @@ session_start();
 
       </div>
 
-    </section><!-- /Testimonials Section -->
+    </section>
 
 
     </div>
     <div class="swiper-pagination"></div>
     </div>
-
     </div>
-
-    </section><!-- /Testimonials Section -->
-
-
+    </section>
     </div>
 
     </div>
-
-    <!-- Recent Posts Section -->
     <section id="recent-posts" class="recent-posts section">
 
-      <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Legfrissebb hírek</h2>
         <p>Olvass a tankönyvrendelési folyamatokról, újdonságokról és tippekről!</p>
@@ -480,13 +450,13 @@ session_start();
               </div>
 
             </article>
-          </div><!-- End post list item -->
+          </div>
 
-        </div><!-- End recent posts list -->
+        </div>
 
       </div>
 
-    </section><!-- /Recent Posts Section -->
+    </section>
 
 
     </div>
@@ -498,7 +468,7 @@ session_start();
 
     </div>
 
-    </section><!-- /Contact Section -->
+    </section>
 
   </main>
   <?php include 'footer.php'; ?>

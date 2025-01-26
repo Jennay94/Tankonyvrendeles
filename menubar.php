@@ -13,7 +13,7 @@ $stmt->bindParam(':userRang', $userRang, PDO::PARAM_INT);
 $stmt->execute();
 $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Rekurzív menüépítő függvény
+
 function renderMenu($menuItems, $parentId = null)
 {
     $html = '';
@@ -48,8 +48,6 @@ function renderMenu($menuItems, $parentId = null)
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>
-
-    <!-- Bootstrap JS és Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>

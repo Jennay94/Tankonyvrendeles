@@ -1,150 +1,144 @@
 <?php
-// SOAP szerver URL-je
-
+// SOAP Kliens
 include('session_check.php');
-
-
-// SOAP hiba kezelés
-function callSoapFunction($function, $params)
+class Client
 {
-    try {
-        $client = new SoapClient(null, [
-            'location' => 'http://localhost/tankonyvrendeles/soap_server.php',
-            'uri' => 'http://localhost/tankonyvrendeles/'
-        ]);
-        $result = $client->__soapCall($function, [$params]);
-        return $result;
-    } catch (Exception $e) {
-        return "SOAP Hiba: " . $e->getMessage();
+    private $instance = NULL;
+
+    public function __construct()
+    {
+        $params = array(
+            'location' => 'http://localhost/tankonyvrendeles/soap_server.php?wsdl',
+            'uri' => 'urn://localhost/tankonyvrendeles/soap_server.php?wsdl',
+            'trace' => 1,
+            'cache_wsdl' => WSDL_CACHE_NONE
+        );
+        $this->instance = new SoapClient(NULL, $params);
+    }
+
+    // Diákok lekérése
+    public function getDiakok()
+    {
+        return $this->instance->__soapCall('getDiakok', []);
+    }
+
+    // Oldalak lekérése
+    public function getPages()
+    {
+        return $this->instance->__soapCall('getPages', []);
+    }
+
+    // Rendelések lekérése
+    public function getRendelesek()
+    {
+        return $this->instance->__soapCall('getRendelesek', []);
+    }
+
+    // Tankönyvek lekérése
+    public function getTk()
+    {
+        return $this->instance->__soapCall('getTk', []);
+    }
+
+    // Tankönyv kategóriák lekérése
+    public function getTkar()
+    {
+        return $this->instance->__soapCall('getTkar', []);
+    }
+
+    // Felhasználók lekérése
+    public function getUsers()
+    {
+        return $this->instance->__soapCall('getUsers', []);
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $function = $_POST['function'];
-    $params = [];
+// Kérés kezelés, ha POST érkezik a 'type' változóval
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type'])) {
+    $type = $_POST['type'];
+    $client = new Client();
 
-    // Különböző funkciókhoz eltérő paraméterek
-    if ($function == 'getAllRendelesek') {
-        $params = [intval($_POST['limit'])];
-    } elseif ($function == 'getRendelesById') {
-        $params = [intval($_POST['rendelesId'])];
-    } elseif ($function == 'addRendeles') {
-        $params = [
-            intval($_POST['diakaz']),
-            intval($_POST['tkaz']),
-            intval($_POST['ev']),
-            $_POST['ingyenes'] === 'true' ? true : false
-        ];
+    switch ($type) {
+        case 'diakok':
+            echo json_encode($client->getDiakok());
+            break;
+        case 'pages':
+            echo json_encode($client->getPages());
+            break;
+        case 'rendelesek':
+            echo json_encode($client->getRendelesek());
+            break;
+        case 'tk':
+            echo json_encode($client->getTk());
+            break;
+        case 'tkar':
+            echo json_encode($client->getTkar());
+            break;
+        case 'users':
+            echo json_encode($client->getUsers());
+            break;
+        default:
+            echo "Érvénytelen típus";
     }
-
-    // A funkció meghívása és válasz kiírása
-    $response = callSoapFunction($function, $params);
+    exit; // Kilépés, hogy ne renderelje újra a HTML-t
 }
+
 ?>
 
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOAP Webszolgáltatás</title>
-</head>
+<?php include 'head.php' ?>
 
-<body>
-    <h1>SOAP Webszolgáltatás</h1>
+<body class="container mt-4">
 
-    <h2>Elérhető funkciók:</h2>
-    <ul>
-        <li><strong>getAllRendelesek($limit)</strong>: A rendelések listája, korlátozott számú eredménnyel.</li>
-        <li><strong>getRendelesById($rendelesId)</strong>: Egy rendelés részletei azonosító alapján.</li>
-        <li><strong>addRendeles($diakaz, $tkaz, $ev, $ingyenes)</strong>: Új rendelés hozzáadása.</li>
-    </ul>
+    <div style="margin-top: 8rem">
+        <h2>SOAP Kliens: Adatok lekérése</h2>
 
-    <h2>Funkciók kipróbálása</h2>
-    <form method="POST">
-        <label for="function">Válassz funkciót:</label>
-        <select name="function" id="function">
-            <option value="getAllRendelesek">getAllRendelesek</option>
-            <option value="getRendelesById">getRendelesById</option>
-            <option value="addRendeles">addRendeles</option>
-        </select>
+        <!-- Gombok a lekéréshez -->
+        <button class="btn btn-primary mt-2" onclick="fetchData('diakok')">Diákok</button>
+        <button class="btn btn-primary mt-2" onclick="fetchData('pages')">Oldalak</button>
+        <button class="btn btn-primary mt-2" onclick="fetchData('rendelesek')">Rendelések</button>
+        <button class="btn btn-primary mt-2" onclick="fetchData('tk')">Tankönyvek</button>
+        <button class="btn btn-primary mt-2" onclick="fetchData('tkar')">Tankönyv Kategóriák</button>
+        <button class="btn btn-primary mt-2" onclick="fetchData('users')">Felhasználók</button>
 
-        <div id="getAllRendelesekParams" style="display:none;">
-            <label for="limit">Limit:</label>
-            <input type="number" name="limit" id="limit" value="5">
-        </div>
-
-        <div id="getRendelesByIdParams" style="display:none;">
-            <label for="rendelesId">Rendelés ID:</label>
-            <input type="number" name="rendelesId" id="rendelesId">
-        </div>
-
-        <div id="addRendelesParams" style="display:none;">
-            <label for="diakaz">Diák azonosító:</label>
-            <input type="number" name="diakaz" id="diakaz">
-            <label for="tkaz">Tankönyv azonosító:</label>
-            <input type="number" name="tkaz" id="tkaz">
-            <label for="ev">Év:</label>
-            <input type="number" name="ev" id="ev">
-            <label for="ingyenes">Ingyenes (true/false):</label>
-            <input type="text" name="ingyenes" id="ingyenes" value="false">
-        </div>
-
-        <button type="submit">Küldés</button>
-    </form>
-
-    <?php if (isset($response)): ?>
-        <h2>Válasz:</h2>
-        <?php if (is_array($response)): ?>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Rendelés Azonosító</th>
-                        <th>Év</th>
-                        <th>Tankönyv Azonosító</th>
-                        <th>Diák Azonosító</th>
-                        <th>Ingyenes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($response as $rendeles): ?>
-                        <tr>
-                            <td><?php echo $rendeles['az']; ?></td>
-                            <td><?php echo $rendeles['ev']; ?></td>
-                            <td><?php echo $rendeles['tkaz']; ?></td>
-                            <td><?php echo $rendeles['diakaz']; ?></td>
-                            <td><?php echo $rendeles['ingyenes'] == 1 ? 'Igen' : 'Nem'; ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <pre><?php print_r($response); ?></pre>
-        <?php endif; ?>
-    <?php endif; ?>
+        <!-- Eredmények megjelenítése -->
+        <div id="results" class="mt-4"></div>
+    </div>
 
     <script>
-        // Változtatás a funkció választása alapján, hogy csak a megfelelő mezők jelenjenek meg
-        document.getElementById('function').addEventListener('change', function () {
-            document.getElementById('getAllRendelesekParams').style.display = 'none';
-            document.getElementById('getRendelesByIdParams').style.display = 'none';
-            document.getElementById('addRendelesParams').style.display = 'none';
+        // Az AJAX kéréseket indító funkció
+        function fetchData(type) {
+            // Törlés a gombnyomás előtt
+            document.getElementById('results').innerHTML = "Töltés...";
 
-            const selectedFunction = this.value;
+            // HTTP kérés létrehozása
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "", true); // A POST kérés a jelenlegi oldalt célozza
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            if (selectedFunction === 'getAllRendelesek') {
-                document.getElementById('getAllRendelesekParams').style.display = 'block';
-            } else if (selectedFunction === 'getRendelesById') {
-                document.getElementById('getRendelesByIdParams').style.display = 'block';
-            } else if (selectedFunction === 'addRendeles') {
-                document.getElementById('addRendelesParams').style.display = 'block';
-            }
-        });
+            // Amikor a válasz megérkezik
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Ha sikeres, a választ megjelenítjük
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        document.getElementById('results').innerHTML = "<pre>" + JSON.stringify(response, null, 2) + "</pre>";
+                    } catch (e) {
+                        document.getElementById('results').innerHTML = "Hiba történt az adatfeldolgozáskor.";
+                    }
+                } else {
+                    // Hibakezelés
+                    document.getElementById('results').innerHTML = "Hiba történt az adatok lekérésekor.";
+                }
+            };
 
-        // Inicializálás
-        document.getElementById('function').dispatchEvent(new Event('change'));
+            // A kérés adatainak elküldése
+            xhr.send("type=" + type);
+        }
     </script>
+
 </body>
 
 </html>

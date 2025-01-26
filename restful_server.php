@@ -19,7 +19,7 @@ if ($resource !== 'diak') {
     exit;
 }
 
-// Funkciók a HTTP metódusokhoz
+// Get kérések
 if ($method === 'GET') {
     if ($id) {
         // Egyetlen diák lekérése

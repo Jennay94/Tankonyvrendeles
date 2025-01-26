@@ -3,13 +3,10 @@ session_start();  // Kezdjük el a session-t
 
 // Adatbázis kapcsolat betöltése
 include('db.php');
-
 // Ellenőrizzük, hogy van-e bejelentkezve felhasználó
 $user_rang = isset($_SESSION['user_rang']) ? $_SESSION['user_rang'] : null;
-
-// Az aktuális oldal neve (pl. index.php)
+// Az aktuális oldal neve 
 $current_page = basename($_SERVER['PHP_SELF']);
-
 // Lekérdezzük az adatbázisból, hogy az oldalhoz milyen rang szükséges
 $query = "SELECT rang FROM pages WHERE url = :url";
 $stmt = $pdo->prepare($query);

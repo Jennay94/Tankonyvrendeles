@@ -1,4 +1,5 @@
 <?php
+
 // Adatbázis kapcsolat
 require_once('db.php');
 require_once('tcpdf/tcpdf.php');
@@ -43,17 +44,17 @@ $pdf->SetFont('dejavusans', '', 12);
 
 // Diák és osztály adatok
 $html = "
-    <h1>Rendelés - {$diak['nev']}</h1>
-    <h2>Osztály: {$diak['osztaly']}</h2>
+    <h1 style='text-align: center; font-size: 20px;'>Rendelés - {$diak['nev']}</h1>
+    <h2 style='text-align: center; font-size: 16px;'>Osztály: {$diak['osztaly']}</h2>
     
     <br><br>
-    <table border='1' cellpadding='5'>
+    <table border='1' cellpadding='5' style='border-collapse: collapse; width: 100%;'>
         <thead>
             <tr>
-                <th>Rendelés Azonosító</th>
-                <th>Év</th>
-                <th>Tárgy</th>
-                <th>Ingyenes</th>
+                <th style='padding: 10px; text-align: left;'>Rendelés Azonosító</th>
+                <th style='padding: 10px; text-align: left;'>Év</th>
+                <th style='padding: 10px; text-align: left;'>Tárgy</th>
+                <th style='padding: 10px; text-align: left;'>Ingyenes</th>
             </tr>
         </thead>
         <tbody>
@@ -63,7 +64,7 @@ $html = "
 if (empty($rendelesek)) {
     $html .= "
         <tr>
-            <td colspan='4'>Nincs rendelés a kiválasztott szűrési feltételek alapján.</td>
+            <td colspan='4' style='text-align: center;'>Nincs rendelés a kiválasztott szűrési feltételek alapján.</td>
         </tr>
     ";
 } else {
@@ -71,10 +72,10 @@ if (empty($rendelesek)) {
     foreach ($rendelesek as $rendeles) {
         $html .= "
             <tr>
-                <td>{$rendeles['az']}</td>
-                <td>{$rendeles['ev']}</td>
-                <td>{$rendeles['cim']}</td>
-                <td>" . ($rendeles['ingyenes'] == 'I' ? 'Igen' : 'Nem') . "</td>
+                <td style='padding: 5px;'>{$rendeles['az']}</td>
+                <td style='padding: 5px;'>{$rendeles['ev']}</td>
+                <td style='padding: 5px;'>{$rendeles['cim']}</td>
+                <td style='padding: 5px;'>" . ($rendeles['ingyenes'] == 'I' ? 'Igen' : 'Nem') . "</td>
             </tr>
         ";
     }

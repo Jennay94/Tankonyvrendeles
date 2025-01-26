@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bejelentkezés</title>
-    <!-- Bootstrap CSS link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -14,8 +13,8 @@
         <?php
         // Az adatbázis kapcsolat betöltése
         include "db.php";
-        session_start();  // Munkamenet indítása
-        
+        session_start();
+
         // Ellenőrizzük, hogy a POST kérés be lett-e küldve
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -46,10 +45,10 @@
                     // Ellenőrizzük, hogy a megadott jelszó egyezik-e a titkosított jelszóval
                     if (password_verify($password, $user['password'])) {
                         // Ha a jelszó helyes, beállítjuk a munkamenetet
-                        $_SESSION['user_id'] = $user['id']; // Felhasználó azonosítója
-                        $_SESSION['user_name'] = $user['user_name']; // Felhasználónév
-                        $_SESSION['user_rang'] = $user['rang']; // Felhasználói rang
-        
+                        $_SESSION['user_id'] = $user['id'];
+                        $_SESSION['user_name'] = $user['user_name'];
+                        $_SESSION['user_rang'] = $user['rang'];
+
                         // Átirányítás a kezdőlapra vagy egy védett oldalra
                         echo '<div class="alert alert-success text-center mt-5" role="alert">
                                 Bejelentkezés sikeres! Átirányítás...

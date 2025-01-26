@@ -1,5 +1,7 @@
 <?php
-// Adatbázis kapcsolat
+include('session_check.php');
+
+include 'head.php';
 require_once('db.php');
 
 // Diákok listája
@@ -63,7 +65,7 @@ $diakok = $diak_stmt->fetchAll();
 
 <body class="container mt-5">
 
-    <h2>PDF Generálás</h2>
+    <h2 style="margin-top: 8rem;">PDF Generálás</h2>
     <form action="generate_pdf.php" method="GET" class="mt-4">
 
         <!-- Diák kiválasztása -->
@@ -87,14 +89,14 @@ $diakok = $diak_stmt->fetchAll();
 
         <!-- Tárgy kiválasztása -->
         <div class="mb-3">
-            <label for="tkaz" class="form-label">Tárgy:</label>
+            <label for="tkaz" class="form-label">Tankönyv:</label>
             <select name="tkaz" id="tkaz" class="form-select">
                 <option value="">Válasszon tárgyat</option>
             </select>
         </div>
 
         <button type="submit" class="btn btn-primary">PDF Generálás</button>
-        <a href="index.php" style="float: right;">Vissza a főoldalra.</a>
+
     </form>
 
     <!-- Bootstrap JS (opcionálisan) -->

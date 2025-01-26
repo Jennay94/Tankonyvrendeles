@@ -1,61 +1,80 @@
 <?php
-require_once 'db.php';
+ini_set("soap.wsdl_cache_enabled", "0");
+require_once('db.php');  // Adatbázis kapcsolódás
 
-class TankonyvService
+class UserService
 {
-    private $pdo;
-
-    public function __construct($pdo)
+    // Diákok lekérése
+    public function getDiakok()
     {
-        $this->pdo = $pdo;
+        global $pdo;
+        $sql = "SELECT az, nev,osztaly FROM diak";
+        $stmt = $pdo->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
-    function getAllRendelesek($limit) {
-            global $pdo;
+    // Oldalak lekérése
+    public function getPages()
+    {
+        global $pdo;
+        $sql = "SELECT id,name,url,parent_id,rang FROM pages";
+        $stmt = $pdo->query($sql);
+        $result = $stmt->fetchAll();
 
-            // Az adatbázis lekérdezés limitálása
-            $stmt = $pdo->prepare("SELECT az, ev, tkaz, diakaz, ingyenes FROM rendeles LIMIT :limit");
-            $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-            $stmt->execute();
-
-            $rendelesek = $stmt->fetchAll();
-            
-            return $rendelesek;
+        return $result;
     }
 
-    // Egy adott rendelés lekérése ID alapján
-    public function getRendelesById($rendelesId)
+    // Rendelések lekérése
+    public function getRendelesek()
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM rendeles WHERE az = :az");
-        $stmt->bindValue(':az', $rendelesId, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch();
+        global $pdo;
+        $sql = "SELECT az,ev,tkaz,diakaz,ingyenes FROM rendeles";
+        $stmt = $pdo->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 
-    // Új rendelés hozzáadása
-    public function addRendeles($diakaz, $tkaz, $ev, $ingyenes)
+    // Tankönyvek lekérése
+    public function getTk()
     {
-        $stmt = $this->pdo->prepare("INSERT INTO rendeles (diakaz, tkaz, ev, ingyenes) VALUES (:diakaz, :tkaz, :ev, :ingyenes)");
-        $stmt->bindValue(':diakaz', $diakaz, PDO::PARAM_INT);
-        $stmt->bindValue(':tkaz', $tkaz, PDO::PARAM_INT);
-        $stmt->bindValue(':ev', $ev, PDO::PARAM_INT);
-        $stmt->bindValue(':ingyenes', $ingyenes, PDO::PARAM_BOOL);
-        $stmt->execute();
-        return "Új rendelés sikeresen hozzáadva!";
+        global $pdo;
+        $sql = "SELECT az,kiadoikod,cim,targy FROM tk";
+        $stmt = $pdo->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    // Tankönyv kategóriák lekérése
+    public function getTkar()
+    {
+        global $pdo;
+        $sql = "SELECT ev,tkaz,ertek FROM tkar";
+        $stmt = $pdo->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
+
+    // Felhasználók lekérése
+    public function getUsers()
+    {
+        global $pdo;
+        $sql = "SELECT id,user_name,password,rang,last_name,first_name,email FROM users";
+        $stmt = $pdo->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
     }
 }
 
-$options = ['uri' => 'http://localhost/tankonyvrendeles/'];
-$server = new SoapServer(null, $options);
+$server = new SoapServer(NULL, [
+    'uri' => "http://localhost/tankonyvrendeles/soap_server.php"
+]);
 
-$service = new TankonyvService($pdo);
-$server->setObject($service);
-
-header("Content-Type: text/xml; charset=utf-8");
-
-try {
-    $server->handle();
-} catch (Exception $e) {
-    echo "SOAP Szerver hiba: " . $e->getMessage();
-}
+$server->setClass('UserService');
+$server->handle();
 ?>

@@ -1,54 +1,13 @@
-<!-- <?php
+<?php
 session_start();
 
-?> -->
-<?php include 'header.php'; ?>
+?>
 
+
+<?php include 'head.php'; ?>
 
 <body class="index-page">
 
-  <header id="header" class="header fixed-top">
-
-    <div class="topbar d-flex align-items-center">
-      <div class="container d-flex justify-content-center justify-content-md-between">
-        <div class="contact-info d-flex align-items-center">
-          <i class="bi bi-envelope d-flex align-items-center"><a
-              href="mailto:contact@example.com">kapcsolat@tankonyvrendeles.hu</a></i>
-          <i class="bi bi-phone d-flex align-items-center ms-4"><span>+3612345678 </span></i>
-        </div>
-        <div class="social-links d-none d-md-flex align-items-center">
-          <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-        </div>
-      </div>
-
-
-
-
-    </div><!-- End Top Bar -->
-
-    <div class="branding d-flex align-items-cente">
-
-      <div class="container position-relative d-flex align-items-center justify-content-between">
-        <a href="index.php" class="logo d-flex align-items-center">
-          <!-- Uncomment the line below if you also wish to use an image logo -->
-          <!-- <img src="assets/img/logo.png" alt=""> -->
-          <h1 class="sitename">Tankönyrendelés</h1>
-          <span>.</span>
-        </a>
-
-        <?php include 'menubar.php'; ?>
-
-
-
-
-      </div>
-
-    </div>
-
-  </header>
 
   <main class="main">
 
@@ -107,7 +66,7 @@ session_start();
       </div>
 
     </section><!-- /Clients Section -->
-    <!-- Miért válasszon minket szekció -->
+
     <section id="why-choose-us" class="why-choose-us section py-5 bg-light">
       <div class="container">
         <div class="row">
@@ -124,7 +83,7 @@ session_start();
             </ul>
           </div>
           <div class="col-lg-6">
-            <img src="assets/img/why-choose-us.jpg" class="img-fluid" alt="Miért válassz minket">
+
           </div>
         </div>
       </div>
@@ -179,7 +138,7 @@ session_start();
             </ul>
           </div>
           <div class="col-lg-6">
-            <img src="assets/img/why-order-on-time.jpg" class="img-fluid" alt="Miért érdemes időben rendelni">
+
           </div>
         </div>
       </div>

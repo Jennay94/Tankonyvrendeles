@@ -1,5 +1,5 @@
 <?php
-
+include('session_check.php');
 // Függvény REST kérésekhez
 function sendRequest($method, $url, $data = null)
 {
@@ -80,59 +80,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="hu">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restful Kliens</title>
-</head>
 
-<body>
-    <h1>Restful Kliens</h1>
+<?php include 'head.php'; ?>
 
-    <!-- GET ALL -->
-    <form method="POST">
-        <h3>GET - Összes diák lekérése</h3>
-        <input type="hidden" name="action" value="GET_ALL">
-        <button type="submit">Lekérés</button>
-    </form>
+<body style="margin-top: 8rem;">
 
-    <!-- GET ONE -->
-    <form method="POST">
-        <h3>GET - Egy diák lekérése</h3>
-        <label>Diák ID: <input type="text" name="id" required></label>
-        <input type="hidden" name="action" value="GET_ONE">
-        <button type="submit">Lekérés</button>
-    </form>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Restful API Kliens</h1>
 
-    <!-- POST -->
-    <form method="POST">
-        <h3>POST - Új diák hozzáadása</h3>
-        <label>Név: <input type="text" name="nev" required></label><br>
-        <label>Osztály: <input type="text" name="osztaly" required></label><br>
-        <input type="hidden" name="action" value="POST">
-        <button type="submit">Hozzáadás</button>
-    </form>
+        <!-- GET ALL -->
+        <form method="POST" class="mb-3">
+            <h3>GET - Összes diák lekérése</h3>
+            <input type="hidden" name="action" value="GET_ALL">
+            <button type="submit" class="btn btn-primary w-30">Lekérés</button>
+        </form>
 
-    <!-- PUT -->
-    <form method="POST">
-        <h3>PUT - Diák frissítése</h3>
-        <label>Diák ID: <input type="text" name="id" required></label><br>
-        <label>Név: <input type="text" name="nev" required></label><br>
-        <label>Osztály: <input type="text" name="osztaly" required></label><br>
-        <input type="hidden" name="action" value="PUT">
-        <button type="submit">Frissítés</button>
-    </form>
+        <!-- GET ONE -->
+        <form method="POST" class="mb-3">
+            <h3>GET - Egy diák lekérése</h3>
+            <div class="mb-3">
+                <label for="id" class="form-label">Diák ID</label>
+                <input type="text" class="form-control" id="id" name="id" required>
+            </div>
+            <input type="hidden" name="action" value="GET_ONE">
+            <button type="submit" class="btn btn-primary w-30">Lekérés</button>
+        </form>
 
-    <!-- DELETE -->
-    <form method="POST">
-        <h3>DELETE - Diák törlése</h3>
-        <label>Diák ID: <input type="text" name="id" required></label>
-        <input type="hidden" name="action" value="DELETE">
-        <button type="submit">Törlés</button>
-    </form>
+        <!-- POST -->
+        <form method="POST" class="mb-3">
+            <h3>POST - Új diák hozzáadása</h3>
+            <div class="mb-3">
+                <label for="nev" class="form-label">Név</label>
+                <input type="text" class="form-control" id="nev" name="nev" required>
+            </div>
+            <div class="mb-3">
+                <label for="osztaly" class="form-label">Osztály</label>
+                <input type="text" class="form-control" id="osztaly" name="osztaly" required>
+            </div>
+            <input type="hidden" name="action" value="POST">
+            <button type="submit" class="btn btn-primary w-30">Hozzáadás</button>
+        </form>
 
-    <h2>Eredmény</h2>
-    <pre><?php echo htmlspecialchars($response); ?></pre>
+        <!-- PUT -->
+        <form method="POST" class="mb-3">
+            <h3>PUT - Diák frissítése</h3>
+            <div class="mb-3">
+                <label for="id" class="form-label">Diák ID</label>
+                <input type="text" class="form-control" id="id" name="id" required>
+            </div>
+            <div class="mb-3">
+                <label for="nev" class="form-label">Név</label>
+                <input type="text" class="form-control" id="nev" name="nev" required>
+            </div>
+            <div class="mb-3">
+                <label for="osztaly" class="form-label">Osztály</label>
+                <input type="text" class="form-control" id="osztaly" name="osztaly" required>
+            </div>
+            <input type="hidden" name="action" value="PUT">
+            <button type="submit" class="btn btn-primary w-30">Frissítés</button>
+        </form>
+
+        <!-- DELETE -->
+        <form method="POST" class="mb-3">
+            <h3>DELETE - Diák törlése</h3>
+            <div class="mb-3">
+                <label for="id" class="form-label">Diák ID</label>
+                <input type="text" class="form-control" id="id" name="id" required>
+            </div>
+            <input type="hidden" name="action" value="DELETE">
+            <button type="submit" class="btn btn-primary w-30">Törlés</button>
+        </form>
+
+        <!-- Eredmény -->
+        <h2 class="mt-4">Válasz</h2>
+        <div class="alert alert-light">
+            <pre><?php echo htmlspecialchars($response); ?></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

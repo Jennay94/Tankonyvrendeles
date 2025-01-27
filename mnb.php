@@ -180,7 +180,7 @@ include 'head.php';
         <?php endif; ?>
 
         <!-- Grafikon -->
-        <?php if (!empty($chartData['labels'])): ?>
+        <?php if (!empty($chartData['labels']) && $queryType === "monthly"): ?>
             <div class="mt-5">
                 <h3>Árfolyamok Grafikonja</h3>
                 <canvas id="exchangeRateChart"></canvas>

@@ -32,7 +32,7 @@ function sendRequest($method, $url, $data = null)
 }
 
 // Alap URL
-$baseUrl = "http://tankonyrendeles.nhely.hu/restful_server.php/diak";
+$baseUrl = "http://tankonyrendeles.nhely.hu/molnar_jennifer/restful_server.php/diak";
 
 // Kérés feldolgozása
 $response = "";

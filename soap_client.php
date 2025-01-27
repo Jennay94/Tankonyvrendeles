@@ -8,8 +8,8 @@ class Client
     public function __construct()
     {
         $params = array(
-            'location' => 'http://localhost/tankonyvrendeles/soap_server.php?wsdl',
-            'uri' => 'urn://localhost/tankonyvrendeles/soap_server.php?wsdl',
+            'location' => 'http://tankonyrendeles.nhely.hu/soap_server.php?wsdl',
+            'uri' => 'urn://tankonyrendeles.nhely.hu/soap_server.php?wsdl',
             'trace' => 1,
             'cache_wsdl' => WSDL_CACHE_NONE
         );

@@ -10,7 +10,7 @@ $ev = $_GET['ev'] ?? '';
 $tkaz = $_GET['tkaz'] ?? '';
 
 // Lekérjük a diák nevét és osztályát
-$diak_query = "SELECT nev, osztaly FROM Diak WHERE az = :diakaz";
+$diak_query = "SELECT nev, osztaly FROM diak WHERE az = :diakaz";
 $diak_stmt = $pdo->prepare($diak_query);
 $diak_stmt->bindParam(':diakaz', $diakaz, PDO::PARAM_INT);
 $diak_stmt->execute();

@@ -1,11 +1,14 @@
 <?php
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
 include('session_check.php');
 
 include 'head.php';
 require_once('db.php');
 
 // Diákok listája
-$diak_query = "SELECT az, nev FROM Diak";
+$diak_query = "SELECT az, nev FROM diak";
 $diak_stmt = $pdo->prepare($diak_query);
 $diak_stmt->execute();
 $diakok = $diak_stmt->fetchAll();

@@ -72,7 +72,7 @@ class UserService
 }
 
 $server = new SoapServer(NULL, [
-    'uri' => "http://localhost/tankonyvrendeles/soap_server.php"
+    'uri' => "http://tankonyrendeles.nhely.hu/soap_server.php"
 ]);
 
 $server->setClass('UserService');

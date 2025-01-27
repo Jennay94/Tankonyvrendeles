@@ -1,5 +1,8 @@
 <?php
-session_start();  // Kezdjük el a session-t
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 
 // Adatbázis kapcsolat betöltése
 include('db.php');

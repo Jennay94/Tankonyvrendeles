@@ -1,8 +1,8 @@
 <?php
 // Adatbázis konfiguráció
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "tankonyvrendeles";
+$password = "AHscvlxy@{&@";
 $dbname = "tankonyvrendeles";
 
 try {
